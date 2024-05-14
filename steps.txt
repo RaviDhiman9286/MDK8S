@@ -1,0 +1,10 @@
+apt install git -y
+kubectl delete all --all
+cd $HOME
+git clone https://github.com/ashishrpandey/example-voting-app
+cd /root/example-voting-app/k8s-specifications
+kubectl apply -f .
+kubectl get all
+connect to the browser and access the URL :
+  cast vote: http://18.140.115.229:31000
+  result: http://18.140.115.229:31001
