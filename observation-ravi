@@ -1,0 +1,79 @@
+###Voting App
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl apply -f .
+deployment.apps/db created
+service/db created
+deployment.apps/redis created
+service/redis created
+deployment.apps/result created
+service/result created
+deployment.apps/vote created
+service/vote created
+deployment.apps/worker created
+------------------------------------------------------------------------------------------
+###checking pods creation
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-58cc845644-znzqd       1/1     Running   0          31s
+redis-6878558678-7xnnn    1/1     Running   0          31s
+result-86bc6f7b5d-wqrxj   1/1     Running   0          31s
+vote-7d884dd585-qlz7h     1/1     Running   0          31s
+worker-6fc5d5b668-5zfvj   1/1     Running   0          31s
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-sp
+-----------------------------------------------------------------------------------------
+###deleting vote pod
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-58cc845644-znzqd       1/1     Running   0          3m11s
+redis-6878558678-7xnnn    1/1     Running   0          3m11s
+result-86bc6f7b5d-wqrxj   1/1     Running   0          3m11s
+vote-7d884dd585-qlz7h     1/1     Running   0          3m11s
+worker-6fc5d5b668-5zfvj   1/1     Running   0          3m11s
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl delete po vote-7d884dd585-qlz7h
+pod "vote-7d884dd585-qlz7h" deleted
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-58cc845644-znzqd       1/1     Running   0          3m28s
+redis-6878558678-7xnnn    1/1     Running   0          3m28s
+result-86bc6f7b5d-wqrxj   1/1     Running   0          3m28s
+vote-7d884dd585-pcjcx     1/1     Running   0          8s
+worker-6fc5d5b668-5zfvj   1/1     Running   0          3m28s
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications#
+-------------------------------------------------------------------------------------------
+###deleting worker pod
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl delete po worker-6fc5d5b668-5zfvj
+pod "worker-6fc5d5b668-5zfvj" deleted
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-58cc845644-znzqd       1/1     Running   0          4m15s
+redis-6878558678-7xnnn    1/1     Running   0          4m15s
+result-86bc6f7b5d-wqrxj   1/1     Running   0          4m15s
+vote-7d884dd585-pcjcx     1/1     Running   0          55s
+worker-6fc5d5b668-stfvw   1/1     Running   0          6s
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications#
+--------------------------------------------------------------------------------------------
+###deleting db pod
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl delete po db-58cc845644-znzqd
+pod "db-58cc845644-znzqd" deleted
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications#
+---------------------------------------------------------------------------------------------
+Every 2.0s: kubectl get po -o wide                                                               ip-172-31-1-11: Thu May 16 09:48:07 2024
+
+NAME                      READY   STATUS        RESTARTS   AGE     IP          NODE             NOMINATED NODE   READINESS GATES
+db-58cc845644-5tl4g       1/1     Running       0          8s      10.32.0.7   ip-172-31-1-11   <none>           <none>
+db-58cc845644-znzqd       1/1     Terminating   0          6m37s   10.32.0.2   ip-172-31-1-11   <none>           <none>
+redis-6878558678-7xnnn    1/1     Running       0          6m37s   10.32.0.3   ip-172-31-1-11   <none>           <none>
+result-86bc6f7b5d-wqrxj   1/1     Running       0          6m37s   10.32.0.4   ip-172-31-1-11   <none>           <none>
+vote-7d884dd585-pcjcx     1/1     Running       0          3m17s   10.32.0.5   ip-172-31-1-11   <none>           <none>
+worker-6fc5d5b668-stfvw   1/1     Running       0          2m28s   10.32.0.6   ip-172-31-1-11   <none>           <none>
+
+WE observered that result and worker node went into error and later on when db node comes online they took the restart and started running.
+-------------------------------------------------------------------------------------------
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications# kubectl get po
+NAME                      READY   STATUS    RESTARTS       AGE
+db-58cc845644-5tl4g       1/1     Running   0              2m31s
+redis-6878558678-7xnnn    1/1     Running   0              9m
+result-86bc6f7b5d-wqrxj   1/1     Running   1 (2m1s ago)   9m
+vote-7d884dd585-pcjcx     1/1     Running   0              5m40s
+worker-6fc5d5b668-stfvw   1/1     Running   1 (2m1s ago)   4m51s
+root@ip-172-31-1-11:~/assignment/example-voting-app/k8s-specifications#
+--------------------------------------------------------------------------------------------
